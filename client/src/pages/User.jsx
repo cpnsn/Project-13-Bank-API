@@ -1,6 +1,40 @@
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchUserProfile, logout, updateUserProfile } from "../redux/authSlice";
 
 export default function User() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, token } = useSelector((state) => state.auth);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [firstName, setFirstName] = useState(user?.firstName || "");
+  const [lastName, setLastName] = useState(user?.lastName || "");
+
+  useEffect(() => {
+    if (!user && token) {
+      dispatch(fetchUserProfile());
+    }
+  }, [user, token, dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+    }
+  }, [user]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
+  const handleSave = () => {
+    dispatch(updateUserProfile({ firstName, lastName }));
+    setIsEditing(false);
+  };
+
   return (
     <div>
       <nav className="main-nav">
@@ -13,14 +47,14 @@ export default function User() {
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
         <div>
-          <Link className="main-nav-item" to="/user.html">
+          <Link className="main-nav-item" to="/user">
             <i className="fa fa-user-circle"></i>
-            Tony
+            {user?.firstName || "User"}
           </Link>
-          <Link className="main-nav-item" to="/">
+          <button className="main-nav-item" onClick={handleLogout}>
             <i className="fa fa-sign-out"></i>
             Sign Out
-          </Link>
+          </button>
         </div>
       </nav>
       <main className="main bg-dark">
@@ -28,9 +62,32 @@ export default function User() {
           <h1>
             Welcome back
             <br />
-            Tony Jarvis!
+            {isEditing ? (
+              <>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </>
+            ) : (
+              `${user?.firstName} ${user?.lastName}!`
+            )}
           </h1>
-          <button className="edit-button">Edit Name</button>
+          {isEditing ? (
+            <button className="edit-button" onClick={handleSave}>
+              Save
+            </button>
+          ) : (
+            <button className="edit-button" onClick={() => setIsEditing(true)}>
+              Edit Name
+            </button>
+          )}
         </div>
         <h2 className="sr-only">Accounts</h2>
         <section className="account">

@@ -9,8 +9,8 @@ export default function App() {
     <>
     <Routes>
       <Route path='/' element={<Home/>} />
-      <Route path='/sign-in.html' element={<Login/>} />
-      <Route path='/user.html' element={<User/>} />
+      <Route path='/login' element={<Login/>} />
+      <Route path='/user' element={<User/>} />
     </Routes>
     </>
   )

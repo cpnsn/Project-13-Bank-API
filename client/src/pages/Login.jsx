@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/authSlice";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,9 +18,11 @@ export default function Login() {
     dispatch(loginUser({ email: email.trim().toLowerCase(), password }));
   };
 
-  if (isAuthenticated) {
-    navigate("/user.html");
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      setTimeout(() => navigate("/user"), 0);
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div>
@@ -34,7 +36,7 @@ export default function Login() {
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
         <div>
-          <Link className="main-nav-item" to="/sign-in.html">
+          <Link className="main-nav-item" to="/login">
             <i className="fa fa-user-circle"></i>
             Sign In
           </Link>
