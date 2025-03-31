@@ -1,0 +1,183 @@
+swagger: '2.0'
+info:
+  title: Argent Bank - Transactions API documentation
+  description: Contains all available transactions API endpoints in this codebase
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
+host: localhost:3001
+basePath: /api/v2
+schemes:
+  - http
+paths:
+  /transactions:
+    get:
+      tags:
+        - Transactions
+      summary: Returns all transactions
+      description: API for fetching all transactions
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions fetched Successfully
+          schema:
+            $ref: '#/definitions/Transactions'
+        '500':
+          description: Internal Server Error
+  /transaction:
+    post:
+      tags:
+        - Transactions
+      summary: Create transaction
+      description: Add a new transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Create new transaction
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionRequest'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction created successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /transaction/{transactionId}:
+    get:
+      tags:
+        - Transactions
+      summary: Find transaction by ID
+      description: Get transaction details by ID
+      operationId: getTransactionById
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of transaction that needs to be fetched
+          required: true
+          type: integer
+          format: int64
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Transaction fetched successfully
+          schema:
+            $ref: '#/definitions/TransactionRequest'
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Transactions
+      summary: Update transaction
+      description: Update a transaction
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of transaction that needs to be updated
+          required: true
+          type: integer
+          format: int64
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Update transaction
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionRequest'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction updated successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Transactions
+      summary: Delete transaction
+      description: Delete a transaction by ID
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of the transaction that needs to be deleted
+          required: true
+          type: integer
+          format: int64
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Transaction deleted successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+  Transactions:
+    type: array
+    items:
+      $ref: '#/definitions/TransactionRequest'
+  TransactionRequest:
+    type: object
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+      date:
+        type: string
+        format: date-time
