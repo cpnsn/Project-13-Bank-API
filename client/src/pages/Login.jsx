@@ -4,8 +4,12 @@ import { loginUser } from "../redux/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  useEffect(() => {
+    document.title = "Argent Bank | Login";
+  }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, isAuthenticated } = useSelector(
@@ -15,7 +19,7 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(loginUser({ email: email.trim().toLowerCase(), password }));
+    dispatch(loginUser({ credentials: { email: email.trim().toLowerCase(), password }, rememberMe }));
   };
 
   useEffect(() => {
@@ -45,7 +49,7 @@ export default function Login() {
       <main className="main bg-dark">
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
-          <h1>Sign In</h1>
+          <h2 style={{ fontSize: "3.2rem" }}>Sign In</h2>
           <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
               <label htmlFor="email">Email</label>
@@ -68,7 +72,12 @@ export default function Login() {
               />
             </div>
             <div className="input-remember">
-              <input type="checkbox" id="remember-me" />
+              <input
+                  type="checkbox"
+                  id="remember-me"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe((prev) => !prev)}
+              />
               <label htmlFor="remember-me">Remember me</label>
             </div>
 

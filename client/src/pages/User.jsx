@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { fetchUserProfile, logout, updateUserProfile } from "../redux/authSlice";
 
 export default function User() {
+  useEffect(() => {
+    document.title = "Argent Bank | Your Profile";
+  }, []);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.auth);
@@ -51,7 +54,11 @@ export default function User() {
             <i className="fa fa-user-circle"></i>
             {user?.firstName || "User"}
           </Link>
-          <button className="main-nav-item" onClick={handleLogout}>
+          <button
+            className="main-nav-item"
+            onClick={handleLogout}
+            style={{ backgroundColor: "white", fontWeight: "bold", color: "#2c3e50" }}
+          >
             <i className="fa fa-sign-out"></i>
             Sign Out
           </button>
@@ -59,7 +66,7 @@ export default function User() {
       </nav>
       <main className="main bg-dark">
         <div className="header">
-          <h1>
+          <h2 style={{ fontSize: "3.2rem" }}>
             Welcome back
             <br />
             {isEditing ? (
@@ -78,7 +85,7 @@ export default function User() {
             ) : (
               `${user?.firstName} ${user?.lastName}!`
             )}
-          </h1>
+          </h2>
           {isEditing ? (
             <button className="edit-button" onClick={handleSave}>
               Save
