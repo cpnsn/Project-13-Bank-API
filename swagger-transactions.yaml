@@ -9,7 +9,7 @@ basePath: /api/v2
 schemes:
   - http
 paths:
-  /account/{accountId}/transactions:
+  /accounts/{accountId}/transactions:
     parameters:
       - name: accountId
         in: path
@@ -48,7 +48,7 @@ paths:
             $ref: "#/definitions/Transactions"
         "500":
           description: Internal Server Error
-  /account/{accountId}/transactions/{transactionId}:
+  /accounts/{accountId}/transactions/{transactionId}:
     parameters:
       - name: accountId
         in: path
