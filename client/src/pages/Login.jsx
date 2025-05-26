@@ -19,12 +19,17 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(loginUser({ credentials: { email: email.trim().toLowerCase(), password }, rememberMe }));
+    dispatch(
+      loginUser({
+        credentials: { email: email.trim().toLowerCase(), password },
+        rememberMe,
+      })
+    );
   };
 
   useEffect(() => {
     if (isAuthenticated) {
-      setTimeout(() => navigate("/user"), 0);
+      setTimeout(() => navigate("/profile"), 0);
     }
   }, [isAuthenticated, navigate]);
 
@@ -73,15 +78,19 @@ export default function Login() {
             </div>
             <div className="input-remember">
               <input
-                  type="checkbox"
-                  id="remember-me"
-                  checked={rememberMe}
-                  onChange={() => setRememberMe((prev) => !prev)}
+                type="checkbox"
+                id="remember-me"
+                checked={rememberMe}
+                onChange={() => setRememberMe((prev) => !prev)}
               />
               <label htmlFor="remember-me">Remember me</label>
             </div>
 
-            {error && <p className="error-message">{error}</p>}
+            {error && (
+              <p className="error-message">
+                {typeof error === "string" ? error : error.message || "An error occurred"}
+              </p>
+            )}
 
             <button type="submit" className="sign-in-button" disabled={loading}>
               {loading ? "Signing In..." : "Sign In"}

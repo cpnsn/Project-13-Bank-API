@@ -29,8 +29,8 @@ export default function User() {
   }, [user]);
 
   const handleLogout = () => {
-    dispatch(logout());
     navigate("/");
+    setTimeout(() => dispatch(logout()), 100);
   };
 
   const handleSave = () => {
@@ -50,14 +50,18 @@ export default function User() {
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
         <div>
-          <Link className="main-nav-item" to="/user">
+          <Link className="main-nav-item" to="/profile">
             <i className="fa fa-user-circle"></i>
             {user?.firstName || "User"}
           </Link>
           <button
             className="main-nav-item"
             onClick={handleLogout}
-            style={{ backgroundColor: "white", fontWeight: "bold", color: "#2c3e50" }}
+            style={{
+              backgroundColor: "white",
+              fontWeight: "bold",
+              color: "#2c3e50",
+            }}
           >
             <i className="fa fa-sign-out"></i>
             Sign Out
