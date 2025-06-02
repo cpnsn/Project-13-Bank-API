@@ -32,13 +32,13 @@ paths:
           type: string
           format: date
           description: Start date for filtering transactions (e.g., 2025-04-01)
-          required: false
+          required: true
         - in: query
           name: endDate
           type: string
           format: date
           description: End date for filtering transactions (e.g., 2025-04-30)
-          required: false
+          required: true
       produces:
         - application/json
       responses:
@@ -46,6 +46,10 @@ paths:
           description: Transactions fetched Successfully
           schema:
             $ref: "#/definitions/Transactions"
+        "401":
+          description: Unauthorized – Missing or invalid JWT token
+        "404":
+          description: Account not found
         "500":
           description: Internal Server Error
   /accounts/{accountId}/transactions/{transactionId}:
@@ -78,6 +82,8 @@ paths:
           description: Transaction fetched successfully
           schema:
             $ref: "#/definitions/TransactionRequest"
+        "401":
+          description: Unauthorized – Missing or invalid JWT token
         "404":
           description: Transaction not found
         "500":
@@ -114,6 +120,10 @@ paths:
             $ref: "#/definitions/ApiResponse"
         "400":
           description: Invalid Fields
+        "401":
+          description: Unauthorized – Missing or invalid JWT token
+        "404":
+          description: Transaction not found
         "500":
           description: Internal Server Error
 securityDefinitions:
@@ -130,12 +140,7 @@ definitions:
       message:
         type: string
       body:
-        type: object
-        properties:
-          id:
-            type: string
-          email:
-            type: string
+        $ref: "#/definitions/TransactionRequest"
   Transactions:
     type: array
     items:
@@ -143,10 +148,25 @@ definitions:
   TransactionRequest:
     type: object
     properties:
-      category:
-        type: string
-      description:
-        type: string
+      id:
+        type: integer
+        format: int64
       date:
         type: string
         format: date-time
+      description:
+        type: string
+      amount:
+        type: number
+        format: float
+      balance:
+        type: number
+        format: float
+      type:
+        type: string
+      category:
+        type: string
+        enum: [Food, Rent, Income, Entertainment, Travel]
+      notes:
+        type: string
+        maxLength: 500
