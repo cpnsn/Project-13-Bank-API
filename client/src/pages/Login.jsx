@@ -34,7 +34,7 @@ export default function Login() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div>
+    <div class="wrapper">
       <nav className="main-nav">
         <Link className="main-nav-logo" to="/">
           <img
@@ -54,7 +54,7 @@ export default function Login() {
       <main className="main bg-dark">
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
-          <h2 style={{ fontSize: "3.2rem" }}>Sign In</h2>
+          <h2>Sign In</h2>
           <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
               <label htmlFor="email">Email</label>

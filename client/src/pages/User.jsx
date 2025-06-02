@@ -39,7 +39,7 @@ export default function User() {
   };
 
   return (
-    <div>
+    <div class="wrapper">
       <nav className="main-nav">
         <Link className="main-nav-logo" to="/">
           <img
@@ -49,13 +49,13 @@ export default function User() {
           />
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
-        <div>
-          <Link className="main-nav-item" to="/profile">
+        <div class="flex">
+          <Link className="main-nav-item flex" to="/profile">
             <i className="fa fa-user-circle"></i>
             {user?.firstName || "User"}
           </Link>
           <button
-            className="main-nav-item"
+            className="main-nav-item flex sign-out-btn"
             onClick={handleLogout}
             style={{
               backgroundColor: "white",
@@ -63,14 +63,14 @@ export default function User() {
               color: "#2c3e50",
             }}
           >
-            <i className="fa fa-sign-out"></i>
+            <i className="fa fa-sign-out-alt"></i>
             Sign Out
           </button>
         </div>
       </nav>
       <main className="main bg-dark">
         <div className="header">
-          <h2 style={{ fontSize: "3.2rem" }}>
+          <h2 style={{ fontSize: "2em" }}>
             Welcome back
             <br />
             {isEditing ? (
