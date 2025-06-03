@@ -9,6 +9,29 @@ basePath: /api/v2
 schemes:
   - http
 paths:
+  /accounts:
+    get:
+      tags:
+        - Accounts
+      summary: Returns all accounts
+      description: Returns a list of all accounts for the authenticated user
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Accounts fetched successfully
+          schema:
+            $ref: "#/definitions/Accounts"
+        "401":
+          description: Unauthorized – Missing or invalid JWT token
+        "404":
+          description: Accounts not found
+        "500":
+          description: Internal Server Error
   /accounts/{accountId}/transactions:
     parameters:
       - name: accountId
@@ -19,26 +42,14 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Returns all transactions
-      description: API for fetching all transactions, optionally filtered by date
+      summary: Returns all transactions for the current month
+      description: API for fetching all transactions for the current month
       parameters:
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
           required: true
           type: string
-        - in: query
-          name: startDate
-          type: string
-          format: date
-          description: Start date for filtering transactions (e.g., 2025-04-01)
-          required: true
-        - in: query
-          name: endDate
-          type: string
-          format: date
-          description: End date for filtering transactions (e.g., 2025-04-30)
-          required: true
       produces:
         - application/json
       responses:
@@ -70,8 +81,7 @@ paths:
           in: path
           description: ID of transaction that needs to be fetched
           required: true
-          type: integer
-          format: int64
+          type: string
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
@@ -98,8 +108,7 @@ paths:
           in: path
           description: ID of transaction that needs to be updated
           required: true
-          type: integer
-          format: int64
+          type: string
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
@@ -110,7 +119,14 @@ paths:
           description: Update transaction
           required: true
           schema:
-            $ref: "#/definitions/TransactionRequest"
+            type: object
+            properties:
+              category:
+                type: string
+                enum: [Food, Rent, Income, Entertainment, Travel]
+              notes:
+                type: string
+                maxLength: 500
       produces:
         - application/json
       responses:
@@ -132,6 +148,21 @@ securityDefinitions:
     name: Authorization
     in: header
 definitions:
+  Account:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      balance:
+        type: number
+        format: float
+
+  Accounts:
+    type: array
+    items:
+      $ref: "#/definitions/Account"
   ApiResponse:
     type: object
     properties:
